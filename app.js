@@ -9,6 +9,8 @@ app.use(express.static("public"));
 PORT = 4000;
 
 const getDescriptors = async (imageFile) => {
+  // const buffer = fs.readFileSync(imageFile);
+  // const tensor = faceapi.tf.node.decodeImage(buffer, 3);
   const faces = await faceapi
     .detectAllFaces(imageFile, new faceapi.TinyFaceDetectorOptions())
     .withFaceLandmarks()
@@ -57,36 +59,28 @@ app.get("/face", async (req, res) => {
   console.log("Face 1:", face1); // Log the value of 'face1'
   console.log("Face 2:", face2); // Log the value of 'face2'
   console.time("add");
-  loadModels()
-  .then(async () => {
-    console.log("Face models loaded successfully.");
-    var dist = await main(face1, face2);
+  var dist = await main(face1, face2);
   console.timeEnd("add");
   res.send({ faceMatch: dist });
   console.log(dist);
+});
+async function loadModels() {
+  
+    await faceapi.nets.tinyFaceDetector.loadFromDisk("./models"),
+    await faceapi.nets.faceExpressionNet.loadFromDisk("./models"),
+    await faceapi.nets.ssdMobilenetv1.loadFromDisk("./models");
+    await faceapi.nets.faceLandmark68Net.loadFromDisk("./models");
+    await faceapi.nets.faceRecognitionNet.loadFromDisk("./models");
+}
+
+// Call loadModels when your server starts
+loadModels()
+  .then(() => {
+    console.log("Face models loaded successfully.");
   })
   .catch((error) => {
     console.error("Failed to load face models:", error);
   });
-  
-});
-
-async function loadModels() {
-    await faceapi.nets.tinyFaceDetector.loadFromDisk("public/models")
-    await faceapi.nets.faceExpressionNet.loadFromDisk("public/models"),
-    await faceapi.nets.ssdMobilenetv1.loadFromDisk("public/models");
-    await faceapi.nets.faceLandmark68Net.loadFromDisk("public/models");
-    await faceapi.nets.faceRecognitionNet.loadFromDisk("public/models");
-}
-
-// Call loadModels when your server starts
-// loadModels()
-//   .then(() => {
-//     console.log("Face models loaded successfully.");
-//   })
-//   .catch((error) => {
-//     console.error("Failed to load face models:", error);
-//   });
 
 async function loadImage(url) {
   const image = await canvas.loadImage(url);
