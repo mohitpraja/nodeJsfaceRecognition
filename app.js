@@ -58,16 +58,10 @@ app.get("/face", async(req, res) =>{
   console.log("Face 1:", face1); // Log the value of 'face1'
   console.log("Face 2:", face2); // Log the value of 'face2'
     console.time("add");
-    loadModels().then(async () => {
-      console.log('Face models loaded successfully.');
-      var dist = await main(face1, face2);
-      console.timeEnd("add");
-      res.send({faceMatch:dist});
-      console.log(dist);
-    }).catch((error) => {
-      console.error('Failed to load face models:', error);
-    });
-   
+    var dist = await main(face1, face2);
+    console.timeEnd("add");
+    res.send({faceMatch:dist});
+    console.log(dist);
   });
 
 
@@ -77,12 +71,11 @@ app.get('/face_similarity', async (req, res)=>{
     res.send("Welcome to root URL of Server"); 
 
     await Promise.all([
-        
-        faceapi.nets.tinyFaceDetector.loadFromDisk("./models"),
-        faceapi.nets.tinyYolov2.loadFromDisk("./models"),
-        faceapi.nets.ssdMobilenetv1.loadFromDisk("./models"),
-        faceapi.nets.faceLandmark68Net.loadFromDisk("./models"),
-        faceapi.nets.faceRecognitionNet.loadFromDisk("./models"),
+        faceapi.nets.tinyFaceDetector.loadFromDisk("models"),
+        faceapi.nets.tinyYolov2.loadFromDisk("models"),
+        faceapi.nets.ssdMobilenetv1.loadFromDisk("models"),
+        faceapi.nets.faceLandmark68Net.loadFromDisk("models"),
+        faceapi.nets.faceRecognitionNet.loadFromDisk("models"),
         // faceapi.nets.ageGenderNet.loadFromDisk("./models"),
       ]);
 
