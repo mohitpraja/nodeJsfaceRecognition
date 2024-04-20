@@ -50,7 +50,9 @@ const main = async (file1, file2) => {
   const distance = faceapi.euclideanDistance(desc1[0], desc2[0]); // only compare first found face in each image
   return (1 - distance)*100;
 };
-
+app.get('/',(req,res)=>{
+  res.send("Welcome to Face Recognition")
+})
 app.get("/face", async(req, res) =>{ 
   const { face1, face2 } = req.query; // Access query parameters using req.query
   console.log("Face 1:", face1); // Log the value of 'face1'
