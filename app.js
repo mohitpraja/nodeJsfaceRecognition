@@ -58,10 +58,16 @@ app.get("/face", async(req, res) =>{
   console.log("Face 1:", face1); // Log the value of 'face1'
   console.log("Face 2:", face2); // Log the value of 'face2'
     console.time("add");
-    var dist = await main(face1, face2);
-    console.timeEnd("add");
-    res.send({faceMatch:dist});
-    console.log(dist);
+    loadModels().then(async () => {
+      console.log('Face models loaded successfully.');
+      var dist = await main(face1, face2);
+      console.timeEnd("add");
+      res.send({faceMatch:dist});
+      console.log(dist);
+    }).catch((error) => {
+      console.error('Failed to load face models:', error);
+    });
+   
   });
 
 
