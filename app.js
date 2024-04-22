@@ -29,6 +29,7 @@ const main = async (file1, file2) => {
   // Ensure response is OK (status code 200)
   console.log(`res 1 : ${response}`)
   console.log(`res 2 : ${response2}`)
+  res.send("i m here");
   if (!response.ok) {
     throw new Error(`Failed to fetch image (HTTP status ${response.status})`);
   }
