@@ -59,10 +59,19 @@ app.get("/face", async (req, res) => {
   console.log("Face 1:", face1); // Log the value of 'face1'
   console.log("Face 2:", face2); // Log the value of 'face2'
   console.time("add");
-  var dist = await main(face1, face2);
+  loadModels()
+  .then(async () => {
+    console.log("Face models loaded successfully.");
+    var dist = await main(face1, face2);
   console.timeEnd("add");
   res.send({ faceMatch: dist });
   console.log(dist);
+  })
+  .catch((error) => {
+    console.error("Failed to load face models:", error);
+  });
+  console.log("function executed");
+  
 });
 async function loadModels() {
   
@@ -74,13 +83,13 @@ async function loadModels() {
 }
 
 // Call loadModels when your server starts
-loadModels()
-  .then(() => {
-    console.log("Face models loaded successfully.");
-  })
-  .catch((error) => {
-    console.error("Failed to load face models:", error);
-  });
+// loadModels()
+//   .then(() => {
+//     console.log("Face models loaded successfully.");
+//   })
+//   .catch((error) => {
+//     console.error("Failed to load face models:", error);
+//   });
 
 async function loadImage(url) {
   const image = await canvas.loadImage(url);
