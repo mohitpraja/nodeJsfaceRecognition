@@ -44,6 +44,9 @@ const main = async (file1, file2) => {
   // Set the image source to the buffer (Base64 data URL)
   img.src = `data:image/jpeg;base64,${buffer.toString("base64")}`;
   img2.src = `data:image/jpeg;base64,${buffer2.toString("base64")}`;
+
+  res.send("i m here");
+  res.send(`i m here : ${img}`);
   ////////////////////////////////////////////////////////////////////////
   await faceapi.tf.ready();
   const [desc1, desc2] = await Promise.all([
