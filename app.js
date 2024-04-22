@@ -29,7 +29,6 @@ const main = async (file1, file2) => {
   // Ensure response is OK (status code 200)
   console.log(`res 1 : ${response}`)
   console.log(`res 2 : ${response2}`)
-  res.send("i m here");
   if (!response.ok) {
     throw new Error(`Failed to fetch image (HTTP status ${response.status})`);
   }
@@ -42,18 +41,18 @@ const main = async (file1, file2) => {
   const img = new Image();
   const img2 = new Image();
 
+  console.log(`img : $img`)
   // Set the image source to the buffer (Base64 data URL)
   img.src = `data:image/jpeg;base64,${buffer.toString("base64")}`;
   img2.src = `data:image/jpeg;base64,${buffer2.toString("base64")}`;
 
-  res.send("i m here");
-  res.send(`i m here : ${img}`);
   ////////////////////////////////////////////////////////////////////////
   await faceapi.tf.ready();
   const [desc1, desc2] = await Promise.all([
     getDescriptors(img),
     getDescriptors(img2),
   ]);
+  console.log(`desc 1 : ${desc1}`)
   const distance = faceapi.euclideanDistance(desc1[0], desc2[0]); // only compare first found face in each image
   console.log(`distance : ${distance}`);
   return (1 - distance) * 100;
